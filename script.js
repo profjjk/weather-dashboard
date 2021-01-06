@@ -10,9 +10,9 @@ var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + testCity +
 $("#submit").on("click", function(event) {
     event.preventDefault();
     cityName = $("#city-name").val();
-    console.log(cityName);
     saveSearch();
     writeToStorage();
+    createButton();
 })
 
 ///// FUNCTIONS /////
@@ -44,9 +44,28 @@ function retrieveFromStorage() {
     } else {
         oldSearches = JSON.parse(localStorage.getItem("weatherSearch")) || [];
     }
-    console.log(oldSearches);
 }
-retrieveFromStorage();
+
+function loadOldSearches() {
+    retrieveFromStorage();
+    for (var i = 0; i < 5; i++) {
+        var city = oldSearches[i].city;
+        prevSearch = $("<button>");
+        prevSearch.addClass("btn btn-light w-75");
+        prevSearch.text(city);
+        $("#previous-search").append(prevSearch);
+    }
+}
+loadOldSearches();
+
+// Create a button from the search.
+function createButton() {
+    prevSearch = $("<button>");
+    prevSearch.addClass("btn btn-light w-75");
+    prevSearch.text(cityName);
+    $("#previous-search").prepend(prevSearch);
+}
+
 
 
 

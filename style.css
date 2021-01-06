@@ -11,6 +11,57 @@ header {
     padding: 1em;
 }
 
+/***** SEARCH SECTION *****/
 #searchbar {
     background: #f2f2f2;
+    padding: 10px;
+}
+
+h4 {
+    margin-top: 5px;
+}
+
+#search-input {
+    margin-top: 5px;
+}
+
+.btn-light {
+    margin-top: 5px;
+}
+
+/***** CURRENT WEATHER SECTION *****/
+#current-weather {
+    margin-top: 10px;
+    padding: 10px;
+}
+
+#date {
+    margin: auto 10px;
+    font-size: 24px;
+}
+
+/***** FORECAST SECTION *****/
+#forecast {
+    margin-top: 20px;
+}
+
+h3 {
+    font-size: 24px;
+}
+
+.card {
+    margin: auto 10px;
+}
+
+.card-body {
+    background: #3393FF;
+}
+
+.card-title {
+    color: #fff;
+}
+
+.card-text {
+    color: #fff;
+    font-size: 12px;
 }

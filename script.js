@@ -34,7 +34,7 @@ function loadOldSearches() {
     for (var i = 0; i < oldSearches.length; i++) {
         var oldQuery = oldSearches[i].city;
         prevSearch = $("<button>");
-        prevSearch.addClass("btn btn-light w-75");
+        prevSearch.addClass("btn btn-light w-100");
         prevSearch.text(oldQuery);
         $("#previous-search").append(prevSearch);
     } 
@@ -44,7 +44,7 @@ loadOldSearches();
 // Create a new button from the search.
 function createButton() {
     prevSearch = $("<button>");
-    prevSearch.addClass("btn btn-light w-75");
+    prevSearch.addClass("btn btn-light w-100");
     prevSearch.text(cityName);
     $("#previous-search").prepend(prevSearch);
 }
@@ -64,8 +64,8 @@ $("#submit").on("click", function(event) {
         // Display current weather from query 1.
         console.log(weatherData);
         $("#city").text(weatherData[0].name);
-        $("#date").text(dayjs.unix(weatherData[0].dt).format("M/D/YYYY"));
-        $("#temp").text("Temperature: " + Math.floor(weatherData[0].main.temp) + "\u00B0");
+        $("#date").text("(" + dayjs.unix(weatherData[0].dt).format("M/D/YYYY") + ")");
+        $("#temp").text("Temperature: " + Math.floor(weatherData[0].main.temp) + "\u00B0F");
         $("#humid").text("Humidity: " + weatherData[0].main.humidity + "%");
         $("#wind").text("Wind speed: " + Math.floor(weatherData[0].wind.speed) + " mph");
         // Save longitude and latitude data for uvIndex query.

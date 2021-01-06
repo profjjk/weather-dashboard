@@ -30,17 +30,19 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-4" id="searchbar">
+            <div class="col-3" id="searchbar">
                 <div>
                     <h4>Search for a City:</h4>
-                    <input id="city-name" type="text" class="form-control w-75 float-start" placeholder="City name ...">
-                    <button class="btn btn-primary float-none" id= "submit" type="button"><img src="img/icon-search.svg" alt="Search Icon"></button>
+                    <div id="search-input">
+                        <input id="city-name" type="text" class="form-control w-75 float-start" placeholder="City name ...">
+                        <button class="btn btn-primary float-none" id= "submit" type="button"><img src="img/icon-search.svg" alt="Search Icon"></button>
+                    </div>
                 </div>
                 <div id="previous-search">
 
                 </div>
             </div>
-            <div class="col-8" id="weather-section">
+            <div class="col-9" id="weather-section">
                 <div id="current-weather" class="border border-light rounded" >
                     <h2><span id="city"></span><span id="date"></span><span id="weather-icon"></span></h2>
                     <p id="temp"></p>

@@ -12,7 +12,7 @@ $("#submit").on("click", function(event) {
     cityName = $("#city-name").val();
     console.log(cityName);
     saveSearch();
-    writeToStorage();  
+    writeToStorage();
 })
 
 ///// FUNCTIONS /////
@@ -29,14 +29,24 @@ $.ajax({
 // Save user search to list.
 function saveSearch() {
     var newCity = {city: cityName};
-    oldSearches.push(newCity);
-    console.log(oldSearches);
+    oldSearches.unshift(newCity);
 }
 
 // Store search list.
 function writeToStorage() {
     localStorage.setItem("weatherSearch", JSON.stringify(oldSearches));
 }
+
+// Retrieve search list.
+function retrieveFromStorage() {
+    if (localStorage === "") {
+        return;
+    } else {
+        oldSearches = JSON.parse(localStorage.getItem("weatherSearch")) || [];
+    }
+    console.log(oldSearches);
+}
+retrieveFromStorage();
 
 
 

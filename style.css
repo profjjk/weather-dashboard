@@ -40,6 +40,34 @@ h4 {
     font-size: 24px;
 }
 
+.uv-low {
+    background: green;
+    border-radius: 5px;
+    padding: 5px;
+    color: white;
+}
+
+.uv-mod {
+    background: yellow;
+    border-radius: 5px;
+    padding: 5px;
+    color: white;
+}
+
+.uv-high {
+    background: orange;
+    border-radius: 5px;
+    padding: 5px;
+    color: white;
+}
+
+.uv-ext {
+    background: red;
+    border-radius: 5px;
+    padding: 5px;
+    color: white;
+}
+
 /***** FORECAST SECTION *****/
 #forecast {
     margin-top: 20px;

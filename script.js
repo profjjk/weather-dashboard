@@ -2,11 +2,11 @@
 ///// GLOBAL VARIABLES /////
 // ---------------------- //
 
-var cityName = "";
-var cityLon = "";
-var cityLat = "";
-var testCity = "London";
+var cityName;
 var searchList = [];
+var weatherData;
+var forecastData;
+var uvindexData;
 var APIKey = "a479558350b81143a0cd27e30716cf87";
 
 
@@ -69,32 +69,60 @@ $("#submit").on("click", function(event) {
     saveSearch();
     createButton();
 
-    // Wait for the ajax query to finish.
-    $.when(currentWeather(), forecastWeather()).done(function(weatherData, forecastData) {
+    currentWeather().then(forecastWeather).then(uvIndex).then(function() {
+        console.log("Weather Data");
+        console.log(weatherData);
+        console.log("--------------");
+        console.log("Forecast Data");
+        console.log(forecastData);
+        console.log("--------------");
+        console.log("UV Index Data");
+        console.log(uvindexData);
 
         // Display results from currentWeather API.
-        console.log("Current Weather Data: " + weatherData);
-        $("#city").text(weatherData[0].name);
-        $("#date").text("(" + dayjs.unix(weatherData[0].dt).format("M/D/YYYY") + ")");
-        $("#temp").text("Temperature: " + Math.floor(weatherData[0].main.temp) + "\u00B0F");
-        $("#humid").text("Humidity: " + weatherData[0].main.humidity + "%");
-        $("#wind").text("Wind speed: " + Math.floor(weatherData[0].wind.speed) + " mph");
-
+        $("#city").text(weatherData.name);
+        $("#date").text("(" + dayjs.unix(weatherData.dt).format("M/D/YYYY") + ")");
+        $("#temp").text("Temperature: " + Math.floor(weatherData.main.temp) + "\u00B0F");
+        $("#humid").text("Humidity: " + weatherData.main.humidity + "%");
+        $("#wind").text("Wind speed: " + Math.floor(weatherData.wind.speed) + " mph");
+        $("#weather-icon").append(`
+            <img class="img-fluid" src="${"http://openweathermap.org/img/wn/" + weatherData.weather[0].icon + "@2x.png"}" alt="Weather Icon"/>
+        `)
         // Display results from forcastWeather API.
-        console.log("Forecast Weather Data: " + forecastData);
-        for (var i = 0; i < 5; i++) {
-            var date = dayjs.unix(forecastData[0].list[i].dt).format("M/D/YYYY");
-            $("#day" + (i+1) + "-title").text(date);
-            $("#day" + (i+1) + "-temp").text("Temp: " + forecastData[0].list[i].main.temp  + "\u00B0");
-            $("#day" + (i+1) + "-humid").text("Humidity: " + forecastData[0].list[i].main.humidity + "%");
+        $("#forecast").append(`
+            <h3>${"5-Day Forecast"}</h3>
+            <div class="card-group" id="five-day">
+            </div>
+        `);
+        for (var i = 0; i < 40; i += 8) {
+            $("#five-day").append(`
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">${dayjs.unix(forecastData.list[i].dt).format("M/D/YYYY")}</h5>
+                        <img class="img-fluid" src="${"http://openweathermap.org/img/wn/" + forecastData.list[i].weather[0].icon + "@2x.png"}" alt="Weather Icon"/>
+                        <p class="card-text">${"Temp: " + forecastData.list[i].main.temp  + "\u00B0"}</p>
+                        <p class="card-text">${"Humidity: " + forecastData.list[i].main.humidity + "%"}</p>
+                    </div>
+                </div>
+            `);
         }
 
-        // Display results from uvIndex API.
-        // uvIndex(function(uvData) {
-        //     console.log(uvData);
-        // })
+        // Display UV Index from One Call API.
+        var uvi = uvindexData.current.uvi;
+        $("#uv").text("UV Index: ");
+        $("#uv-num").text(uvindexData.current.uvi);
+        if (uvi < 3) {
+            $("#uv-num").addClass("uv-low");
+        } else if (uvi < 6) {
+            $("#uv-num").addClass("uv-mod");
+        } else if (uvi < 8) {
+            $("#uv-num").addClass("uv-high");
+        } else {
+            $("#uv-num").addClass("uv-ext");
+        }
+        
     })
-})
+});
 
 
 //------------------ //
@@ -107,47 +135,41 @@ function currentWeather() {
         url: "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&units=imperial&appid=" + APIKey,
         method: "GET",
         cors: true,
-        success: function(response) {
-            var weatherSTR = JSON.stringify(response);
-            console.log("Current Weather API: " + weatherSTR);
-
-        //     // Save longitude and latitude data for uvIndex query.
-        //     var coordinates = weatherSTR.coord;
-        //     console.log(coordinates);
-        //     cityLon = weatherSTR.coord.lon;
-        //     cityLat = weatherSTR.coord.lat;
-        //     console.log("Longitude: " + cityLon + " | " + "Latitude: " + cityLat);
+        success: function(data) {
+            var weatherSTR = JSON.stringify(data);
+            weatherData = JSON.parse(weatherSTR);
         }
-    });
+    })
 }
 
 // 5 Day Forecast API
 function forecastWeather() {
     return $.ajax({
-        url: "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + "&units=imperial&cnt=5&appid=" + APIKey,
+        url: "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + "&units=imperial&appid=" + APIKey,
         method: "GET",
         cors: true,
-        success: function(response) {
-            var forecastSTR = JSON.stringify(response);
-            console.log("Forcast API: " + forecastSTR);
+        success: function(data) {
+            var forecastSTR = JSON.stringify(data);
+            forecastData = JSON.parse(forecastSTR);
         }
     });
 };
 
 // One Call API - get UV Index.
-// function uvIndex(cityLon, cityLat) {
-//     var lon = cityLon;
-//     var lat = cityLat;
-//     return $.ajax({
-//         url: "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude={part}&appid=" + APIKey,
-//         method: "GET",
-//         cors: true,
-//         success: function(response) {
-//             var uvindexSTR = JSON.stringify(response);
-//             console.log("UV Index API: " + uvindexSTR);
-//         }
-//     });
-// };
+function uvIndex() {
+    var lon = weatherData.coord.lon;
+    var lat = weatherData.coord.lat;
+    return $.ajax({
+        url: "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude={part}&appid=" + APIKey,
+        method: "GET",
+        cors: true,
+        success: function(data) {
+            var uvindexSTR = JSON.stringify(data);
+            uvindexData = JSON.parse(uvindexSTR);
+        }
+    });
+};
+
 
 
 
@@ -157,6 +179,7 @@ function forecastWeather() {
 // Prevent the creation of duplicate previous search buttons.
 // Color code the UV Index based on value.
 // (optional) Limit the number of previous searches saved.
+// Prevent multiple forcasts from loading following multiple searches.
 
 ///// STUCK /////
 // Get the UV Index to display using longitude and latitude.

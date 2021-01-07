@@ -73,7 +73,7 @@ $("#submit").on("click", function(event) {
     $.when(currentWeather(), forecastWeather()).done(function(weatherData, forecastData) {
 
         // Display results from currentWeather API.
-        console.log(weatherData);
+        console.log("Current Weather Data: " + weatherData);
         $("#city").text(weatherData[0].name);
         $("#date").text("(" + dayjs.unix(weatherData[0].dt).format("M/D/YYYY") + ")");
         $("#temp").text("Temperature: " + Math.floor(weatherData[0].main.temp) + "\u00B0F");
@@ -81,7 +81,7 @@ $("#submit").on("click", function(event) {
         $("#wind").text("Wind speed: " + Math.floor(weatherData[0].wind.speed) + " mph");
 
         // Display results from forcastWeather API.
-        console.log(forecastData);
+        console.log("Forecast Weather Data: " + forecastData);
         for (var i = 0; i < 5; i++) {
             var date = dayjs.unix(forecastData[0].list[i].dt).format("M/D/YYYY");
             $("#day" + (i+1) + "-title").text(date);

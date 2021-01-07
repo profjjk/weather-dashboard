@@ -51,10 +51,12 @@ h3 {
 
 .card {
     margin: auto 10px;
+    border: none;
 }
 
 .card-body {
     background: #3393FF;
+    border-radius: 5px;
 }
 
 .card-title {

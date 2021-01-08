@@ -41,11 +41,12 @@ loadSearchList();
 ///// SEARCH FOR WEATHER /////
 // ------------------------ //
 
-// Add user search to searchList list and save to local storage.
+// Add user search to searchList list, save to local storage, clear input field.
 function saveSearch() {
     var newCity = {city: cityName};
     searchList.unshift(newCity);
     localStorage.setItem("weatherSearch", JSON.stringify(searchList));
+    $("#city-name").val("");
 }
 
 // Add a new search button to previous search results.
@@ -174,14 +175,8 @@ function uvIndex() {
 
 
 ///// TO DO /////
-// Clear search input after search.
 // Add functionality to previous search buttons.
 // Prevent the creation of duplicate previous search buttons.
 // Color code the UV Index based on value.
 // (optional) Limit the number of previous searches saved.
 // Prevent multiple forcasts from loading following multiple searches.
-
-///// STUCK /////
-// Get the UV Index to display using longitude and latitude.
-// Get the forecast dates to display accurately.
-// Get the weather icons to appear.

@@ -134,6 +134,27 @@ $("#submit").on("click", function(event) {
     })
 });
 
+$(".submit").on("click", function(event) {
+    event.preventDefault();
+
+    // Get city name from input and execute save functions.
+    cityName = $(this).text();
+
+    currentWeather().then(forecastWeather).then(uvIndex).then(function() {
+        console.log("Weather Data");
+        console.log(weatherData);
+        console.log("--------------");
+        console.log("Forecast Data");
+        console.log(forecastData);
+        console.log("--------------");
+        console.log("UV Index Data");
+        console.log(uvindexData);
+        populateCurrent();
+        populateForecast();
+        populateUVI();
+    })
+});
+
 
 //------------------ //
 ///// API QUERIES /////

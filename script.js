@@ -43,21 +43,27 @@ loadSearchList();
 
 // Add user search to searchList list, save to local storage, clear input field.
 function saveSearch() {
-    var newCity = {city: cityName};
-    searchList.unshift(newCity);
-    localStorage.setItem("weatherSearch", JSON.stringify(searchList));
-    $("#city-name").val("");
+    if (cityName === "") {
+        return;
+    } else if (searchList.includes(cityName)) {
+        return;
+    } else {
+        var newCity = {city: cityName};
+        searchList.unshift(newCity);
+        localStorage.setItem("weatherSearch", JSON.stringify(searchList));
+        $("#city-name").val("");
+    }
 }
 
 // Add a new search button to previous search results.
 function createButton() {
-    var newButton = $("<button class=\"btn btn-light w-100 text-start fw-light submit\">").text(cityName);
-    for (var i = 0; i < searchList.length; i++) {
-        if (searchList[i] === cityName) {
-            return;
-        } else {
-            $("#previous-search").prepend(newButton);
-        }
+    if (cityName === "") {
+        return;
+    } else if (searchList.includes(cityName)) {
+        return;
+    } else {
+        var newButton = $("<button class=\"btn btn-light w-100 text-start fw-light submit\">").text(cityName);
+        $("#previous-search").prepend(newButton);
     }
 }
 
@@ -126,13 +132,13 @@ $("#submit").on("click", function(event) {
     createButton();
 
     currentWeather().then(forecastWeather).then(uvIndex).then(function() {
-        console.log("Weather Data");
+        console.log("Weather Data " + cityName);
         console.log(weatherData);
         console.log("--------------");
-        console.log("Forecast Data");
+        console.log("Forecast Data " + cityName);
         console.log(forecastData);
         console.log("--------------");
-        console.log("UV Index Data");
+        console.log("UV Index Data " + cityName);
         console.log(uvindexData);
         populateCurrent();
         populateForecast();
@@ -148,13 +154,13 @@ $(".submit").on("click", function(event) {
     cityName = $(this).text();
 
     currentWeather().then(forecastWeather).then(uvIndex).then(function() {
-        console.log("Weather Data");
+        console.log("Weather Data " + cityName);
         console.log(weatherData);
         console.log("--------------");
-        console.log("Forecast Data");
+        console.log("Forecast Data " + cityName);
         console.log(forecastData);
         console.log("--------------");
-        console.log("UV Index Data");
+        console.log("UV Index Data " + cityName);
         console.log(uvindexData);
         populateCurrent();
         populateForecast();
@@ -214,4 +220,3 @@ function uvIndex() {
 ///// TO DO /////
 // Prevent the creation of duplicate previous search buttons.
 // (optional) Limit the number of previous searches saved.
-// Prevent multiple forcasts from loading following multiple searches.

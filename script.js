@@ -61,6 +61,55 @@ function createButton() {
     }
 }
 
+// Populate current weather section with API data.
+function populateCurrent() {
+    $("#city").text(weatherData.name);
+    $("#date").text("(" + dayjs.unix(weatherData.dt).format("M/D/YYYY") + ")");
+    $("#temp").text("Temperature: " + Math.floor(weatherData.main.temp) + "\u00B0F");
+    $("#humid").text("Humidity: " + weatherData.main.humidity + "%");
+    $("#wind").text("Wind speed: " + Math.floor(weatherData.wind.speed) + " mph");
+    $("#weather-icon").append(`
+        <img class="img-fluid" src="${"http://openweathermap.org/img/wn/" + weatherData.weather[0].icon + "@2x.png"}" alt="Weather Icon"/>
+    `)
+}
+
+// Populate forecast section with API data.
+function populateForecast() {
+    $("#forecast").append(`
+    <h3>${"5-Day Forecast"}</h3>
+    <div class="card-group" id="five-day">
+    </div>
+    `);
+    for (var i = 0; i < 40; i += 8) {
+        $("#five-day").append(`
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">${dayjs.unix(forecastData.list[i].dt).format("M/D/YYYY")}</h5>
+                    <img class="img-fluid" src="${"http://openweathermap.org/img/wn/" + forecastData.list[i].weather[0].icon + "@2x.png"}" alt="Weather Icon"/>
+                    <p class="card-text">${"Temp: " + forecastData.list[i].main.temp  + "\u00B0"}</p>
+                    <p class="card-text">${"Humidity: " + forecastData.list[i].main.humidity + "%"}</p>
+                </div>
+            </div>
+        `);
+    }
+}
+
+// Populate uv index with API data.
+function populateUVI() {
+    var uvi = uvindexData.current.uvi;
+    $("#uv").text("UV Index: ");
+    $("#uv-num").text(uvindexData.current.uvi);
+    if (uvi < 3) {
+        $("#uv-num").addClass("uv-low");
+    } else if (uvi < 6) {
+        $("#uv-num").addClass("uv-mod");
+    } else if (uvi < 8) {
+        $("#uv-num").addClass("uv-high");
+    } else {
+        $("#uv-num").addClass("uv-ext");
+    }
+}
+
 // Query OpenWeather API when search button is clicked.
 $("#submit").on("click", function(event) {
     event.preventDefault();
@@ -79,49 +128,9 @@ $("#submit").on("click", function(event) {
         console.log("--------------");
         console.log("UV Index Data");
         console.log(uvindexData);
-
-        // Display results from currentWeather API.
-        $("#city").text(weatherData.name);
-        $("#date").text("(" + dayjs.unix(weatherData.dt).format("M/D/YYYY") + ")");
-        $("#temp").text("Temperature: " + Math.floor(weatherData.main.temp) + "\u00B0F");
-        $("#humid").text("Humidity: " + weatherData.main.humidity + "%");
-        $("#wind").text("Wind speed: " + Math.floor(weatherData.wind.speed) + " mph");
-        $("#weather-icon").append(`
-            <img class="img-fluid" src="${"http://openweathermap.org/img/wn/" + weatherData.weather[0].icon + "@2x.png"}" alt="Weather Icon"/>
-        `)
-        // Display results from forcastWeather API.
-        $("#forecast").append(`
-            <h3>${"5-Day Forecast"}</h3>
-            <div class="card-group" id="five-day">
-            </div>
-        `);
-        for (var i = 0; i < 40; i += 8) {
-            $("#five-day").append(`
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">${dayjs.unix(forecastData.list[i].dt).format("M/D/YYYY")}</h5>
-                        <img class="img-fluid" src="${"http://openweathermap.org/img/wn/" + forecastData.list[i].weather[0].icon + "@2x.png"}" alt="Weather Icon"/>
-                        <p class="card-text">${"Temp: " + forecastData.list[i].main.temp  + "\u00B0"}</p>
-                        <p class="card-text">${"Humidity: " + forecastData.list[i].main.humidity + "%"}</p>
-                    </div>
-                </div>
-            `);
-        }
-
-        // Display UV Index from One Call API.
-        var uvi = uvindexData.current.uvi;
-        $("#uv").text("UV Index: ");
-        $("#uv-num").text(uvindexData.current.uvi);
-        if (uvi < 3) {
-            $("#uv-num").addClass("uv-low");
-        } else if (uvi < 6) {
-            $("#uv-num").addClass("uv-mod");
-        } else if (uvi < 8) {
-            $("#uv-num").addClass("uv-high");
-        } else {
-            $("#uv-num").addClass("uv-ext");
-        }
-        
+        populateCurrent();
+        populateForecast();
+        populateUVI();
     })
 });
 

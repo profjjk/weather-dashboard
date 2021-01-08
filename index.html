@@ -31,6 +31,7 @@
     <div class="container">
         <div class="row">
             <div class="col-3" id="searchbar">
+                <!-- City Search Input -->
                 <div>
                     <h4>Search for a City:</h4>
                     <div id="search-input">
@@ -38,26 +39,24 @@
                         <button class="btn btn-primary float-none" id= "submit" type="button"><img src="img/icon-search.svg" alt="Search Icon"></button>
                     </div>
                 </div>
+
+                <!-- Previous Search Buttons -->
                 <div id="previous-search">
-
                 </div>
             </div>
+
             <div class="col-9" id="weather-section">
+                <!-- Current Weather -->
                 <div id="current-weather" class="border border-light rounded" >
-                    <h2><span id="city"></span><span id="date"></span><span id="weather-icon"></span></h2>
-                    <p id="temp"></p>
-                    <p id="humid"></p>
-                    <p id="wind"></p>
-                    <p><span id="uv"></span><span id="uv-num"></span></p>
-
                 </div>
-                <div class="row" id="forecast">
-                    
+
+                <!-- 5 Day Forecast -->
+                <div class="row" id="forecast">     
                 </div>
             </div>
+
         </div>
     </div>
-
 
 <!-- My script file -->
 <script src="script.js"></script>

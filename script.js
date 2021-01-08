@@ -51,30 +51,36 @@ function saveSearch() {
 
 // Add a new search button to previous search results.
 function createButton() {
-    var newSearch = $("<button class=\"btn btn-light w-100 text-start fw-light submit\">").text(cityName);
+    var newButton = $("<button class=\"btn btn-light w-100 text-start fw-light submit\">").text(cityName);
     for (var i = 0; i < searchList.length; i++) {
         if (searchList[i] === cityName) {
             return;
         } else {
-            $("#previous-search").prepend(newSearch);
+            $("#previous-search").prepend(newButton);
         }
     }
 }
 
 // Populate current weather section with API data.
 function populateCurrent() {
-    $("#city").text(weatherData.name);
-    $("#date").text("(" + dayjs.unix(weatherData.dt).format("M/D/YYYY") + ")");
-    $("#temp").text("Temperature: " + Math.floor(weatherData.main.temp) + "\u00B0F");
-    $("#humid").text("Humidity: " + weatherData.main.humidity + "%");
-    $("#wind").text("Wind speed: " + Math.floor(weatherData.wind.speed) + " mph");
+    $("#current-weather").empty();
+    $("#current-weather").append(`
+        <h2><span id="city">${weatherData.name}</span><span id="date">(${dayjs.unix(weatherData.dt).format("M/D/YYYY")})</span><span id="weather-icon"></span></h2>
+        <p id="temp">${"Temperature: " + Math.floor(weatherData.main.temp) + "\u00B0F"}</p>
+        <p id="humid">${"Humidity: " + weatherData.main.humidity + "%"}</p>
+        <p id="wind">${"Wind speed: " + Math.floor(weatherData.wind.speed) + " mph"}</p>
+        <p><span id="uv"></span><span id="uv-num"></span></p>
+    `)
     $("#weather-icon").append(`
         <img class="img-fluid" src="${"http://openweathermap.org/img/wn/" + weatherData.weather[0].icon + "@2x.png"}" alt="Weather Icon"/>
     `)
 }
 
+
+
 // Populate forecast section with API data.
 function populateForecast() {
+    $("#forecast").empty();
     $("#forecast").append(`
     <h3>${"5-Day Forecast"}</h3>
     <div class="card-group" id="five-day">
@@ -134,6 +140,7 @@ $("#submit").on("click", function(event) {
     })
 });
 
+// Query OpenWeather API when 'this' button is clicked.
 $(".submit").on("click", function(event) {
     event.preventDefault();
 
@@ -205,8 +212,6 @@ function uvIndex() {
 
 
 ///// TO DO /////
-// Add functionality to previous search buttons.
 // Prevent the creation of duplicate previous search buttons.
-// Color code the UV Index based on value.
 // (optional) Limit the number of previous searches saved.
 // Prevent multiple forcasts from loading following multiple searches.

@@ -1,4 +1,4 @@
-# 06 Server-Side APIs: Weather Dashboard
+# Weather Dashboard
 
 ## Table of Contents
 * [Project Summary](##project-summary)

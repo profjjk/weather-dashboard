@@ -214,9 +214,22 @@ function uvIndex() {
     });
 };
 
-
+// Display last search.
+function displayLast() {
+    if (searchList === []) {
+        return
+    } else {
+        cityName = searchList[0].city
+        currentWeather().then(forecastWeather).then(uvIndex).then(function() {
+            populateCurrent();
+            populateForecast();
+            populateUVI();
+        })
+    }  
+}
+displayLast();
 
 
 ///// TO DO /////
-// Prevent the creation of duplicate previous search buttons.
+// Prevent the creation of duplicate search buttons.
 // (optional) Limit the number of previous searches saved.
